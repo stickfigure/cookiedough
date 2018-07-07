@@ -1,0 +1,36 @@
+{
+  "name": "cookiedough",
+  "version": "1.0.0",
+  "description": "Bulk Set Cookies",
+  "main": "index.js",
+  "scripts": {
+    "build": "./node_modules/.bin/webpack",
+    "watch": "./node_modules/.bin/webpack -w"
+  },
+  "author": "",
+  "private": true,
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@bitbucket.org/orbitkit/cookiedough.git"
+  },
+  "dependencies": {
+    "react": "16.0.x",
+    "react-dom": "16.0.x"
+  },
+  "devDependencies": {
+    "@types/chrome": "~0.0.49",
+    "@types/react": "^16.0.34",
+    "@types/react-dom": "^16.0.3",
+    "awesome-typescript-loader": "3.0.x",
+    "css-loader": "0.28.x",
+    "node-sass": "^4.7.2",
+    "sass-loader": "6.0.x",
+    "source-map-loader": "0.1.x",
+    "style-loader": "0.13.x",
+    "typescript": "2.9.x",
+    "uglify-es-webpack-plugin": "0.0.2",
+    "webpack": "3.10.x",
+    "webpack-dev-server": "^2.10.1"
+  }
+}
