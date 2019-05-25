@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "Cookiedough",
 	"description": "Developer tool to bulk set cookies from a standard cookie header string",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"icons": {
 		"128": "cookie.png"
 	},
