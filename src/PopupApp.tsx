@@ -3,7 +3,7 @@ import {removeAllCookies, setCookie} from "./cookies";
 
 const initialState = {
 	cookies: '',
-	clear: false,
+	clear: true,
 };
 
 type State = Readonly<typeof initialState>;
