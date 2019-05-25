@@ -1,9 +1,12 @@
 import * as React from "react";
-import {removeAllCookies, setCookie} from "./cookies";
+import {copyToClipboard} from "./clipboard";
+import {getAllCookies, removeAllCookies, setCookie} from "./cookies";
 
 const initialState = {
 	cookies: '',
 	clear: true,
+	oldCookies: null,
+	url: null,
 };
 
 type State = Readonly<typeof initialState>;
@@ -11,21 +14,35 @@ type State = Readonly<typeof initialState>;
 export class PopupApp extends React.Component<undefined, State> {
 	readonly state = initialState;
 
-	private click = (): void => {
+	componentDidMount(): void {
 		chrome.tabs.query({active: true, currentWindow: true}, tabs => {
 			const url = tabs[0].url;
-			const cookieString = this.state.cookies;
 
-			const first = this.state.clear ? removeAllCookies(url) : Promise.resolve();
+			this.setState({url});
 
-			first
-				.then(() => this.setCookies(url, cookieString))
-				.then(() => window.close())
-				.catch(err => alert(err.message));
+			this.getCookies(url).then(oldCookies => {
+				this.setState({oldCookies});
+			});
 		});
+	}
+
+	private click = async (): Promise<void> => {
+		const url = this.state.url;
+		const cookieString = this.state.cookies;
+
+		if (this.state.clear) {
+			await removeAllCookies(url);
+		}
+
+		try {
+			await this.setCookies(cookieString);
+			window.close();
+		} catch (err) {
+			alert(err.message);
+		}
 	};
 
-	private setCookies(url: string, cookieString: string): Promise<any> {
+	private setCookies(cookieString: string): Promise<any> {
 		const cookies = cookieString.split(/; */);
 
 		const promises = cookies.map(cookieString => {
@@ -33,19 +50,42 @@ export class PopupApp extends React.Component<undefined, State> {
 			const key = keyVal[0];
 			const value = keyVal.length > 1 ? keyVal[1] : '';
 
-			return setCookie(url, key, value);
+			return setCookie(this.state.url, key, value);
 		});
 
 		return Promise.all(promises);
 	}
 
+	private async getCookies(url: string): Promise<string> {
+		const cookies = await getAllCookies(url);
+		return cookies
+			.map(cookie => cookie.name + "=" + cookie.value)
+			.join("; ");
+	}
+
 	render() {
-		const {cookies, clear} = this.state;
+		const {url, oldCookies, cookies, clear} = this.state;
+
+		if (url === null || oldCookies === null)
+			return null;
 
 		return (
 			<div>
 				<div style={{color: 'grey'}}>
-					Paste a cookie header, e.g. <code>foo=bar; bat=baz; oof=rab</code>
+					Existing cookies <button onClick={() => copyToClipboard(oldCookies)}>copy</button>
+				</div>
+
+				<div style={{marginTop: '0.5em'}}>
+					<textarea
+						rows={5}
+						cols={100}
+						value={oldCookies}
+						readOnly={true}
+					></textarea>
+				</div>
+
+				<div style={{color: 'grey', marginTop: '1em'}}>
+					Update cookies with a cookie header, e.g. <code>foo=bar; bat=baz; oof=rab</code>
 				</div>
 
 				<div style={{marginTop: '0.5em'}}>

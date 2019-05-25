@@ -1,6 +1,6 @@
 import Cookie = chrome.cookies.Cookie;
 
-export function getAllCookies(url: string): Promise<Cookie[]> {
+export async function getAllCookies(url: string): Promise<Cookie[]> {
 	return new Promise<Cookie[]>((resolve, reject) => {
 		chrome.cookies.getAll({
 			url: url,
@@ -13,7 +13,7 @@ export function getAllCookies(url: string): Promise<Cookie[]> {
 	});
 }
 
-export function removeAllCookies(url: string): Promise<any> {
+export async function removeAllCookies(url: string): Promise<any> {
 	return getAllCookies(url)
 		.then(cookies => {
 			const promises = cookies.map(cookie => removeCookie(url, cookie));
@@ -21,7 +21,7 @@ export function removeAllCookies(url: string): Promise<any> {
 		});
 }
 
-export function removeCookie(url: string, cookie: Cookie): Promise<any> {
+export async function removeCookie(url: string, cookie: Cookie): Promise<any> {
 	return new Promise<Cookie[]>((resolve, reject) => {
 		console.log("Removing cookie " + cookie.name + " from " + url);
 
@@ -37,7 +37,7 @@ export function removeCookie(url: string, cookie: Cookie): Promise<any> {
 	});
 }
 
-export function setCookie(url: string, name: string, value: string): Promise<any> {
+export async function setCookie(url: string, name: string, value: string): Promise<any> {
 	return new Promise<any>((resolve, reject) => {
 		console.log("Setting cookie " + name + "=" + value + " on " + url);
 
