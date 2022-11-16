@@ -26,7 +26,7 @@
     "css-loader": "0.28.x",
     "node-sass": "^4.7.2",
     "sass-loader": "6.0.x",
-    "source-map-loader": "0.1.x",
+    "source-map-loader": "4.0.x",
     "style-loader": "0.13.x",
     "typescript": "2.9.x",
     "uglify-es-webpack-plugin": "0.0.2",
